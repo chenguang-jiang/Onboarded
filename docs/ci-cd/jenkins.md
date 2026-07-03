@@ -19,6 +19,8 @@ Anonymous access currently returns `403 Forbidden`, so the UI/API configuration 
 5. Deploy the backend to `110.42.239.130` over SSH when `DEPLOY_BACKEND=true`.
 6. Restart the `onboarding-api` systemd service and check `http://127.0.0.1:8080/api/health`.
 
+`DEPLOY_BACKEND` defaults to `false` so the first Jenkins run can validate CI even before the production SSH credential is created. Enable it manually once `onboarded-prod-ssh` exists and the server env file has real values.
+
 ## Jenkins Requirements
 
 Install or verify these Jenkins capabilities:

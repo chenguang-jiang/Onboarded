@@ -10,8 +10,8 @@ pipeline {
   parameters {
     booleanParam(
       name: 'DEPLOY_BACKEND',
-      defaultValue: true,
-      description: 'Deploy backend to the configured server after a successful main-branch build.'
+      defaultValue: false,
+      description: 'Deploy backend to the configured server after a successful main-branch build. Enable after Jenkins SSH credentials are ready.'
     )
   }
 
