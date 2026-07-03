@@ -40,6 +40,12 @@ Health check:
 curl http://localhost:8080/api/health
 ```
 
+## CI/CD
+
+Jenkins pipeline configuration is in `Jenkinsfile`.
+
+Setup notes are in `docs/ci-cd/jenkins.md`. The pipeline runs backend tests, packages the Spring Boot jar, deploys it over SSH, restarts the `onboarding-api` systemd service, and checks `/api/health`.
+
 M1 API smoke flow:
 
 ```bash

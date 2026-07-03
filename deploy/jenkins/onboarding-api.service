@@ -1,0 +1,18 @@
+[Unit]
+Description=Onboarded Spring Boot API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=onboarding
+Group=onboarding
+WorkingDirectory=/opt/onboarded/onboarding-api
+EnvironmentFile=/opt/onboarded/onboarding-api/onboarding-api.env
+ExecStart=/usr/bin/java -jar /opt/onboarded/onboarding-api/onboarding-api.jar
+Restart=always
+RestartSec=8
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
