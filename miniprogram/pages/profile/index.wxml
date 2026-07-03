@@ -1,0 +1,40 @@
+<view class="page-shell profile-page">
+  <view class="profile-card glass-card">
+    <view class="profile-name">Onboarding</view>
+    <view class="profile-copy">系统架构师备考</view>
+    <view class="metric-row">
+      <view class="metric-card">
+        <text class="metric-value">{{dailyTarget}}</text>
+        <text class="metric-label">每日目标</text>
+      </view>
+      <view class="metric-card">
+        <text class="metric-value">{{reminderTime}}</text>
+        <text class="metric-label">提醒时间</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="setting-list">
+    <view class="setting-row glass-card">
+      <view>
+        <view class="setting-title">考试日期</view>
+        <view class="setting-copy">{{examDate}}</view>
+      </view>
+      <view class="setting-action">调整</view>
+    </view>
+    <view class="setting-row glass-card">
+      <view>
+        <view class="setting-title">订阅提醒</view>
+        <view class="setting-copy">{{subscriptionStatus}}</view>
+      </view>
+      <view class="setting-action" bindtap="onSubscribeReminder">管理</view>
+    </view>
+    <view class="setting-row glass-card">
+      <view>
+        <view class="setting-title">知识库</view>
+        <view class="setting-copy">内置知识库</view>
+      </view>
+      <view class="setting-action">查看</view>
+    </view>
+  </view>
+</view>

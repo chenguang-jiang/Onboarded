@@ -1,0 +1,43 @@
+{
+  "pages": [
+    "pages/onboarding/index",
+    "pages/today/index",
+    "pages/answer/index",
+    "pages/ai-chat/index",
+    "pages/wrongbook/index",
+    "pages/profile/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "Onboarding",
+    "navigationBarBackgroundColor": "#F6F8FF",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F6F8FF"
+  },
+  "tabBar": {
+    "color": "#8B97AA",
+    "selectedColor": "#1F6FFF",
+    "backgroundColor": "#F9FBFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/today/index",
+        "text": "今日"
+      },
+      {
+        "pagePath": "pages/ai-chat/index",
+        "text": "AI"
+      },
+      {
+        "pagePath": "pages/wrongbook/index",
+        "text": "错题"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

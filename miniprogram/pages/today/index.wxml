@@ -1,0 +1,118 @@
+<view class="page-shell today-page">
+  <view class="hero glass-card">
+    <view class="hero-grid">
+      <view>
+        <view class="hero-topline">D-{{daysLeft}}</view>
+        <view class="hero-title">今日 15 个考点</view>
+        <view class="hero-copy">按薄弱、错题、顺延排序。</view>
+      </view>
+      <view class="progress-orbit">
+        <view class="progress-number">{{progressPercent}}%</view>
+        <view class="progress-label">进度</view>
+      </view>
+    </view>
+    <view class="flow-progress">
+      <view class="flow-progress-fill" style="{{progressStyle}}"></view>
+    </view>
+    <view class="metric-grid">
+      <view class="metric-card">
+        <text class="metric-value">{{completed}}/{{total}}</text>
+        <text class="metric-label">完成</text>
+      </view>
+      <view class="metric-card">
+        <text class="metric-value">{{streak}}</text>
+        <text class="metric-label">连续</text>
+      </view>
+      <view class="metric-card">
+        <text class="metric-value">{{studiedCount}}</text>
+        <text class="metric-label">已学</text>
+      </view>
+      <view class="metric-card">
+        <text class="metric-value">{{weakCount}}</text>
+        <text class="metric-label">巩固</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="mastery-card glass-card">
+    <view class="mastery-head">
+      <view class="section-title">章节掌握</view>
+      <view class="mastery-avg">均分 {{overallAvg}}</view>
+    </view>
+    <view class="metric-row compact-metrics">
+      <view class="metric-card">
+        <text class="metric-value">{{studiedCount}}</text>
+        <text class="metric-label">已学</text>
+      </view>
+      <view class="metric-card">
+        <text class="metric-value">{{masteredCount}}</text>
+        <text class="metric-label">掌握</text>
+      </view>
+      <view class="metric-card">
+        <text class="metric-value">{{weakCount}}</text>
+        <text class="metric-label">薄弱</text>
+      </view>
+    </view>
+    <view wx:if="{{weakChapters.length}}" class="weak-list">
+      <block wx:for="{{weakChapters}}" wx:key="chapterId">
+        <view class="weak-row">
+          <view class="weak-title">{{item.chapterTitle}}</view>
+          <view class="weak-bar">
+            <view class="weak-bar-fill" style="width:{{item.averageScore}}%"></view>
+          </view>
+          <view class="weak-score">{{item.averageScore}}</view>
+        </view>
+      </block>
+    </view>
+    <view wx:else class="weak-empty">暂无薄弱章节。</view>
+  </view>
+
+  <view class="section-header">
+    <view>
+      <view class="section-title">知识卡</view>
+      <view class="section-subtitle">滑动查看，做题验证。</view>
+    </view>
+    <view class="header-actions">
+      <view class="ai-pill" bindtap="onAskAi">问 AI</view>
+      <view class="refresh-pill" bindtap="refreshToday">刷新</view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-card glass-card">加载中...</view>
+  <view wx:elif="{{errorMessage}}" class="error-card glass-card">{{errorMessage}}</view>
+
+  <swiper
+    wx:else
+    class="card-swiper"
+    current="{{activeCardIndex}}"
+    previous-margin="60rpx"
+    next-margin="60rpx"
+    duration="300"
+    bindchange="onSwiperChange"
+  >
+    <block wx:for="{{knowledgeCards}}" wx:key="itemId">
+      <swiper-item>
+        <view class="knowledge-card glass-card {{index === activeCardIndex ? 'card-active' : 'card-side'}} {{item.status === 'DONE' ? 'card-done' : ''}}">
+          <view class="card-head">
+            <view class="tag-row">
+              <view class="card-source">{{item.source}}</view>
+              <view class="tag-soft">{{item.tags[0] || '考点'}}</view>
+            </view>
+            <view class="card-status {{item.statusClass}}">{{item.statusText}}</view>
+          </view>
+          <view class="card-title">{{item.title}}</view>
+          <view class="card-chapter">{{item.chapter}}</view>
+          <view class="card-summary">{{item.summary}}</view>
+          <view class="question-preview">
+            <text class="preview-label">题目</text>
+            <text class="preview-text">{{item.questionStem}}</text>
+          </view>
+          <view class="card-actions">
+            <view class="ghost-button mini-button" data-index="{{index}}" bindtap="onAskAi">问 AI</view>
+            <view class="primary-button mini-button {{item.status === 'DONE' ? 'button-disabled' : ''}}" data-index="{{index}}" bindtap="onStartPractice">{{item.status === 'DONE' ? '已完成' : '做题'}}</view>
+          </view>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>

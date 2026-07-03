@@ -1,0 +1,71 @@
+.profile-card {
+  padding: 32rpx;
+  background:
+    radial-gradient(circle at 88% 16%, rgba(255, 255, 255, 0.78), transparent 30%),
+    linear-gradient(155deg, rgba(232, 243, 255, 0.96), rgba(236, 240, 255, 0.9) 50%, rgba(255, 235, 194, 0.88));
+}
+
+.profile-name {
+  color: var(--color-text);
+  font-size: 44rpx;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.profile-copy {
+  margin-top: 12rpx;
+  color: var(--color-muted);
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.profile-card .metric-card {
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.profile-card .metric-value {
+  color: var(--color-text);
+}
+
+.profile-card .metric-label {
+  color: var(--color-muted);
+}
+
+.setting-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-top: 30rpx;
+}
+
+.setting-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20rpx;
+  align-items: center;
+  padding: 26rpx;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(247, 250, 255, 0.72));
+}
+
+.setting-title {
+  color: var(--color-text);
+  font-size: 29rpx;
+  font-weight: 740;
+}
+
+.setting-copy {
+  margin-top: 8rpx;
+  color: var(--color-muted);
+  font-size: 23rpx;
+  line-height: 1.42;
+}
+
+.setting-action {
+  padding: 13rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(31, 111, 255, 0.1);
+  color: #1f5fd1;
+  font-size: 23rpx;
+  font-weight: 740;
+}

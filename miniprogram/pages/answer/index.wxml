@@ -1,0 +1,60 @@
+<view class="page-shell answer-page">
+  <view wx:if="{{loading}}" class="state-card glass-card">题目加载中...</view>
+  <view wx:elif="{{errorMessage}}" class="state-card glass-card error">{{errorMessage}}</view>
+
+  <block wx:else>
+    <view class="knowledge-flip {{flipped ? 'is-flipped' : ''}}" bindtap="onFlipKnowledge">
+      <view class="flip-inner">
+        <view class="knowledge-face knowledge-front glass-card">
+          <view class="knowledge-head">
+            <view>
+              <view class="knowledge-label">{{chapterTitle}}</view>
+              <view class="knowledge-title">{{knowledgeTitle}}</view>
+            </view>
+            <view class="flip-trigger">易错</view>
+          </view>
+          <view class="knowledge-summary">{{knowledgeSummary}}</view>
+        </view>
+        <view class="knowledge-face knowledge-back glass-card">
+          <view class="knowledge-label">易错考法</view>
+          <view class="trap-copy">{{trapText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="question-card glass-card">
+      <view class="question-stem">{{stem}}</view>
+      <view class="option-list">
+        <block wx:for="{{options}}" wx:key="key">
+          <view
+            class="option-row {{item.state}} {{item.state === 'correct' ? 'is-correct' : ''}} {{item.state === 'wrong' ? 'is-wrong' : ''}}"
+            data-key="{{item.key}}"
+            bindtap="onSelectOption"
+          >
+            <view class="option-key">{{item.key}}</view>
+            <view class="option-text">{{item.text}}</view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view wx:if="{{submitted}}" class="result-card glass-card {{isCorrect ? 'result-correct' : 'result-wrong'}}">
+      <view class="result-banner {{isCorrect ? 'banner-correct' : 'banner-wrong'}}">{{resultBanner}}</view>
+      <view class="result-section">
+        <view class="result-label">解析</view>
+        <view class="result-explanation">{{explanation}}</view>
+      </view>
+      <view class="result-actions">
+        <view class="ghost-button action" bindtap="onAskAi">问 AI</view>
+        <view class="primary-button action" bindtap="onBack">{{mode === 'wrongbook' ? '返回错题本' : '返回今日'}}</view>
+      </view>
+    </view>
+
+    <view wx:else class="submit-bar">
+      <view
+        class="primary-button submit-button {{!selectedKey ? 'disabled' : ''}}"
+        bindtap="onSubmit"
+      >提交答案</view>
+    </view>
+  </block>
+</view>

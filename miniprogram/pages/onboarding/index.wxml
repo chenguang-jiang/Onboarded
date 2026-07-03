@@ -1,0 +1,43 @@
+<view class="page-shell onboarding-page">
+  <view class="orbital-bg"></view>
+
+  <view class="hero glass-card">
+    <view class="hero-kicker">System Architect</view>
+    <view class="hero-title">Onboarding</view>
+    <view class="hero-copy">每天 15 个考点，配套练题。</view>
+  </view>
+
+  <view class="setup-panel glass-card">
+    <view class="field-group">
+      <view class="field-label">考试日期</view>
+      <picker mode="date" value="{{examDate}}" bindchange="onDateChange">
+        <view class="picker-control">{{examDate}}</view>
+      </picker>
+    </view>
+
+    <view class="field-group">
+      <view class="field-label">每日目标</view>
+      <view class="target-grid">
+        <block wx:for="{{targetOptions}}" wx:key="*this">
+          <view
+            class="target-chip {{index === targetIndex ? 'target-chip-active' : ''}}"
+            data-index="{{index}}"
+            bindtap="onTargetChange"
+          >
+            {{item}}
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="field-group">
+      <view class="field-label">提醒时间</view>
+      <picker mode="time" value="{{reminderTime}}" bindchange="onTimeChange">
+        <view class="picker-control">{{reminderTime}}</view>
+      </picker>
+    </view>
+
+    <view wx:if="{{errorMessage}}" class="error-banner">{{errorMessage}}</view>
+    <button class="primary-button submit-button" loading="{{loading}}" bindtap="onSubmit">开始</button>
+  </view>
+</view>

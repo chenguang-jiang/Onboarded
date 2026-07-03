@@ -1,0 +1,74 @@
+<view class="page-shell wrongbook-page">
+  <view class="summary glass-card">
+    <view class="section-title">错题复盘</view>
+    <view class="section-subtitle">按章节整理。</view>
+    <view class="metric-row">
+      <view class="metric-card">
+        <text class="metric-value">{{pendingCount}}</text>
+        <text class="metric-label">待重做</text>
+      </view>
+      <view class="metric-card">
+        <text class="metric-value">{{masteredCount}}</text>
+        <text class="metric-label">已掌握</text>
+      </view>
+    </view>
+    <view wx:if="{{heatmapChapters.length}}" class="heatmap">
+      <block wx:for="{{heatmapChapters}}" wx:key="chapterId">
+        <view class="heat-row">
+          <view class="heat-title">{{item.chapterTitle}}</view>
+          <view class="heat-track">
+            <view class="heat-fill" style="width:{{item.count * 18 + 18}}%"></view>
+          </view>
+          <view class="heat-count">{{item.count}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="mode-tabs glass-card">
+    <block wx:for="{{filterModes}}" wx:key="*this">
+      <view
+        class="mode-tab {{item === activeMode ? 'mode-active' : ''}}"
+        data-mode="{{item}}"
+        bindtap="onModeTap"
+      >{{item}}</view>
+    </block>
+  </view>
+
+  <scroll-view class="filter-rail" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="filter-inner">
+      <block wx:for="{{chapters}}" wx:key="chapterId">
+        <view
+          class="chip {{item.chapterId === activeChapterId ? 'chip-active' : ''}}"
+          data-chapter-id="{{item.chapterId}}"
+          bindtap="onFilterTap"
+        >{{item.chapterTitle}}</view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{loading}}" class="state-card glass-card">加载中...</view>
+  <view wx:elif="{{errorMessage}}" class="state-card glass-card error">{{errorMessage}}</view>
+  <view wx:elif="{{visibleItems.length === 0}}" class="state-card glass-card">暂无错题。</view>
+
+  <view wx:else class="wrong-list">
+    <block wx:for="{{visibleItems}}" wx:key="id">
+      <view class="wrong-card glass-card">
+        <view class="wrong-head">
+          <view>
+            <view class="wrong-title">{{item.title}}</view>
+            <view class="wrong-meta">{{item.chapter}} · 错 {{item.wrongCount}} 次</view>
+          </view>
+          <view class="wrong-status {{item.statusClass}}">{{item.statusText}}</view>
+        </view>
+        <view class="wrong-stem">{{item.stem}}</view>
+        <view class="reason-tag">{{item.errorReason}}</view>
+        <view class="wrong-actions">
+          <view class="ghost-button small-action" data-id="{{item.id}}" bindtap="onAskAi">问 AI</view>
+          <view class="ghost-button small-action" data-id="{{item.id}}" bindtap="onMarkMastered">掌握</view>
+          <view class="primary-button small-action" data-id="{{item.id}}" bindtap="onRedo">重做</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

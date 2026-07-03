@@ -1,0 +1,35 @@
+# Java
+target/
+*.class
+*.jar
+*.war
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Node / Mini Program tooling
+node_modules/
+miniprogram/miniprogram_npm/
+miniprogram/.idea/
+project.private.config.json
+miniprogram/project.private.config.json
+
+# Local environment
+.env
+.env.*
+application-*.local.yml
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+
+# Temporary extraction output
+.tmp/

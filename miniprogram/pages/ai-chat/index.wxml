@@ -1,0 +1,63 @@
+<view class="page-shell ai-page">
+  <view class="context-card glass-card">
+    <view class="context-head">
+      <view>
+        <view class="context-label">知识库</view>
+        <view class="context-title">{{activeSessionTitle || '软考系统架构师知识库'}}</view>
+      </view>
+      <view class="new-session" bindtap="onNewSession">+ 新会话</view>
+    </view>
+    <view class="section-subtitle">先检索，再回答。</view>
+  </view>
+
+  <view class="message-list">
+    <view wx:if="{{loading && messages.length === 0}}" class="state-text">加载中...</view>
+    <view wx:elif="{{errorMessage && messages.length === 0}}" class="state-text error">{{errorMessage}}</view>
+    <view wx:elif="{{messages.length === 0}}" class="empty-guide glass-card">
+      <view class="empty-title">问一个考点</view>
+      <view class="empty-copy">质量属性、架构风格、案例都可以。</view>
+      <view class="empty-prompts">
+        <view class="empty-chip" data-prompt="解释质量属性场景六要素" bindtap="onQuickPrompt">质量属性</view>
+        <view class="empty-chip" data-prompt="对比管道过滤器和分层架构" bindtap="onQuickPrompt">架构对比</view>
+      </view>
+    </view>
+
+    <block wx:for="{{messages}}" wx:key="id">
+      <view wx:if="{{item.role === 'user'}}" class="message user-message">{{item.content}}</view>
+      <view wx:else class="message ai-message glass-card">
+        <view class="answer-copy">{{item.content}}</view>
+        <view class="ai-actions">
+          <view wx:if="{{item.references.length}}" class="reference-card">
+            <view class="reference-title">参考来源</view>
+            <block wx:for="{{item.references}}" wx:for-item="ref" wx:key="*this">
+              <view class="reference-item">{{ref}}</view>
+            </block>
+          </view>
+          <view class="review-action" data-id="{{item.id}}" bindtap="onAddReview">加入复习</view>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{sending}}" class="message ai-message glass-card">
+      <view class="answer-copy typing">检索中...</view>
+      <view class="typing-line"></view>
+    </view>
+  </view>
+
+  <view class="chat-composer glass-card">
+    <scroll-view class="chip-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="chip-row nowrap">
+        <block wx:for="{{quickPrompts}}" wx:key="*this">
+          <view class="chip" data-prompt="{{item}}" bindtap="onQuickPrompt">{{item}}</view>
+        </block>
+      </view>
+    </scroll-view>
+    <view wx:if="{{recording || recognizing}}" class="voice-hint">{{voiceHint}}</view>
+    <view class="input-row">
+      <view class="voice-button {{recording ? 'voice-recording' : ''}} {{!voiceAvailable ? 'voice-disabled' : ''}}" bindtap="onToggleVoice">
+        {{recording ? '停止' : '语音'}}
+      </view>
+      <input class="input-real" value="{{inputText}}" placeholder="输入问题" bindinput="onInput" confirm-type="send" bindconfirm="onSend" />
+      <view class="send-button {{(!inputText || sending) ? 'send-disabled' : ''}}" bindtap="onSend">发送</view>
+    </view>
+  </view>
+</view>

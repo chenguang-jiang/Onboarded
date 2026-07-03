@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: onboarding-api
+  profiles:
+    active: standalone
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+wechat:
+  mini-program:
+    app-id: ${WECHAT_MINI_APP_ID:wx0395857cc0cc197e}
+    app-secret: ${WECHAT_MINI_APP_SECRET:}
+    mock: ${WECHAT_MINI_MOCK:true}
+
+glm:
+  api-key: ${GLM_API_KEY:}
+  model: glm-5.2
+  knowledge-id: ${GLM_KNOWLEDGE_ID:2072256899017056256}
+  timeout-seconds: 60
+  max-daily-requests-per-user: 100
+  mock: ${GLM_MOCK:true}
