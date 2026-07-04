@@ -83,7 +83,7 @@ Create a Pipeline job, for example:
 Onboarded-main
 ```
 
-Use Pipeline from SCM:
+Recommended setup when GitHub access from the Jenkins server is stable:
 
 ```text
 SCM: Git
@@ -91,6 +91,11 @@ Repository URL: https://github.com/chenguang-jiang/Onboarded.git
 Branch: */main
 Script Path: Jenkinsfile
 ```
+
+The current `Onboarded-main` job is configured as an inline Pipeline in Jenkins
+with an explicit `Checkout` stage that retries GitHub checkout up to 5 times.
+This avoids failing before the pipeline starts when the Jenkins server has
+intermittent `github.com:443` connectivity.
 
 For automatic builds, configure the GitHub webhook:
 
