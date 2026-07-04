@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   options {
+    skipDefaultCheckout(true)
     buildDiscarder(logRotator(numToKeepStr: '20'))
     disableConcurrentBuilds()
     timestamps()
@@ -25,6 +26,24 @@ pipeline {
   }
 
   stages {
+    stage('Checkout') {
+      steps {
+        retry(5) {
+          timeout(time: 3, unit: 'MINUTES') {
+            checkout([$class: 'GitSCM',
+              branches: [[name: '*/main']],
+              userRemoteConfigs: [[url: 'https://github.com/chenguang-jiang/Onboarded.git']],
+              extensions: [
+                [$class: 'CloneOption', timeout: 3],
+                [$class: 'CheckoutOption', timeout: 3]
+              ]
+            ])
+          }
+        }
+        sh 'git rev-parse --short HEAD'
+      }
+    }
+
     stage('Environment') {
       steps {
         sh '''
@@ -78,24 +97,26 @@ pipeline {
         }
       }
       steps {
-        withCredentials([sshUserPrivateKey(
-          credentialsId: "${env.DEPLOY_SSH_CREDENTIAL_ID}",
-          keyFileVariable: 'DEPLOY_SSH_KEY',
-          usernameVariable: 'DEPLOY_SSH_USER'
-        )]) {
-          sh '''
-            set -euo pipefail
-            ssh_opts="-i $DEPLOY_SSH_KEY -o StrictHostKeyChecking=accept-new"
-            remote="$DEPLOY_SSH_USER@$DEPLOY_HOST"
+        retry(3) {
+          withCredentials([sshUserPrivateKey(
+            credentialsId: "${env.DEPLOY_SSH_CREDENTIAL_ID}",
+            keyFileVariable: 'DEPLOY_SSH_KEY',
+            usernameVariable: 'DEPLOY_SSH_USER'
+          )]) {
+            sh '''
+              set -euo pipefail
+              ssh_opts="-i $DEPLOY_SSH_KEY -o StrictHostKeyChecking=accept-new"
+              remote="$DEPLOY_SSH_USER@$DEPLOY_HOST"
 
-            ssh $ssh_opts "$remote" "sudo mkdir -p '$DEPLOY_APP_DIR/incoming' && sudo chown -R '$DEPLOY_SSH_USER' '$DEPLOY_APP_DIR/incoming'"
-            scp $ssh_opts .jenkins-deploy/onboarding-api.jar "$remote:$DEPLOY_APP_DIR/incoming/onboarding-api.jar"
-            scp $ssh_opts .jenkins-deploy/onboarding-api.service "$remote:$DEPLOY_APP_DIR/incoming/onboarding-api.service"
-            scp $ssh_opts .jenkins-deploy/onboarding-api.env.example "$remote:$DEPLOY_APP_DIR/incoming/onboarding-api.env.example"
-            scp $ssh_opts .jenkins-deploy/remote-deploy-backend.sh "$remote:$DEPLOY_APP_DIR/incoming/remote-deploy-backend.sh"
+              ssh $ssh_opts "$remote" "sudo mkdir -p '$DEPLOY_APP_DIR/incoming' && sudo chown -R '$DEPLOY_SSH_USER' '$DEPLOY_APP_DIR/incoming'"
+              scp $ssh_opts .jenkins-deploy/onboarding-api.jar "$remote:$DEPLOY_APP_DIR/incoming/onboarding-api.jar"
+              scp $ssh_opts .jenkins-deploy/onboarding-api.service "$remote:$DEPLOY_APP_DIR/incoming/onboarding-api.service"
+              scp $ssh_opts .jenkins-deploy/onboarding-api.env.example "$remote:$DEPLOY_APP_DIR/incoming/onboarding-api.env.example"
+              scp $ssh_opts .jenkins-deploy/remote-deploy-backend.sh "$remote:$DEPLOY_APP_DIR/incoming/remote-deploy-backend.sh"
 
-            ssh $ssh_opts "$remote" "sudo APP_DIR='$DEPLOY_APP_DIR' SERVICE_NAME='$SERVICE_NAME' BUILD_NUMBER='$BUILD_NUMBER' HEALTH_URL='$HEALTH_URL' bash '$DEPLOY_APP_DIR/incoming/remote-deploy-backend.sh'"
-          '''
+              ssh $ssh_opts "$remote" "sudo APP_DIR='$DEPLOY_APP_DIR' SERVICE_NAME='$SERVICE_NAME' BUILD_NUMBER='$BUILD_NUMBER' HEALTH_URL='$HEALTH_URL' bash '$DEPLOY_APP_DIR/incoming/remote-deploy-backend.sh'"
+            '''
+          }
         }
       }
     }
