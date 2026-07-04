@@ -30,8 +30,9 @@ pipeline {
         sh '''
           set -euo pipefail
           java -version
-          mvn -version
           git --version
+          cd "$BACKEND_DIR"
+          ./mvnw -version
         '''
       }
     }
@@ -39,7 +40,7 @@ pipeline {
     stage('Test') {
       steps {
         dir("${env.BACKEND_DIR}") {
-          sh 'mvn -B test'
+          sh './mvnw -B test'
         }
       }
       post {
@@ -52,7 +53,7 @@ pipeline {
     stage('Package Backend') {
       steps {
         dir("${env.BACKEND_DIR}") {
-          sh 'mvn -B -DskipTests package'
+          sh './mvnw -B -DskipTests package'
         }
         sh '''
           set -euo pipefail

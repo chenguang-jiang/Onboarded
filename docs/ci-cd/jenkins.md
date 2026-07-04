@@ -3,7 +3,7 @@
 Jenkins URL:
 
 ```text
-http://110.42.239.130:8082/Jenkins
+http://110.42.239.130:8082/
 ```
 
 Anonymous access currently returns `403 Forbidden`, so the UI/API configuration must be completed with a Jenkins account that can create jobs and credentials.
@@ -29,9 +29,12 @@ Install or verify these Jenkins capabilities:
 - Pipeline plugin.
 - Credentials Binding plugin.
 - JDK 21 or newer available to the Jenkins agent.
-- Maven 3.9 or newer available to the Jenkins agent.
+- Internet access from the Jenkins agent to Maven Central for the Maven Wrapper
+  download on first run.
 
-The pipeline uses `java` and `mvn` from the agent `PATH`, so make sure the Jenkins service environment points to JDK 21+.
+The pipeline uses `java` from the agent `PATH` and the repository Maven Wrapper
+at `backend/onboarding-api/mvnw`, so Maven does not need to be preinstalled on
+the Jenkins agent.
 
 ## Credentials
 
@@ -92,7 +95,7 @@ Script Path: Jenkinsfile
 For automatic builds, configure the GitHub webhook:
 
 ```text
-http://110.42.239.130:8082/Jenkins/github-webhook/
+http://110.42.239.130:8082/github-webhook/
 ```
 
 If the Jenkins server is not reachable from GitHub, use polling as a fallback:
